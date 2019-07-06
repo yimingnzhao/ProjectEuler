@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-
+#include "errno.h"
 
 /**
  * Reverses a string
@@ -222,8 +222,19 @@ unsigned long large_sum() {
 	// Converts the string to unsigned long
 	char * endptr;
 	int base = 10;
+	errno = 0;
 	unsigned long ans = strtoul( ans_str, &endptr, base );
 	
+	// Checks for errors with strtoul
+	if ( errno != 0 ) {
+		perror("strtoul");
+		return 0;
+	}
+	if ( endptr == ans_str ) {
+		fprintf( stderr, "%s\n", "No integer was found" );
+		return 0;
+	}
+
 	// Frees dynamically allocated memory
 	free(sum);
 
