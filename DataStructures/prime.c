@@ -55,6 +55,23 @@ int next_prime( int x ) {
 }
 
 
+/**
+ * Returns the previous prime number
+ * Error Case: returns -1 when the previous prime number does not exist
+ */
+int previous_prime( int x ) {
+
+	// Continues to decrement x until the previous prime is found
+	do {
+		x--;
+		if ( x < 2 ) {
+			return -1;
+		}
+	} while ( is_prime( x ) != 1 );
+
+	return x;
+}
+
 
 /**
  * Gets a list of prime numbers up to the limit
