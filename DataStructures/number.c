@@ -51,3 +51,58 @@ int num_digits( int num ) {
 	return count;
 
 }
+
+
+/**
+ * Gets the next lexigraphical permutation of a number
+ */
+int next_permutation( int num ) {
+
+	// Converts the int into a string
+	int digits = num_digits( num );
+	char nums[digits + 1];
+	snprintf( nums, digits + 1, "%d", num );
+
+	// Gets the pivot point, defined by the character index right before the longest non-increasing suffix
+	int pivot = -1;
+	for ( int i = digits - 1; i > 0; i-- ) {
+		if ( nums[i] > nums[i-1] ) {
+			pivot = i - 1;
+			break;
+		}
+	}
+
+	// Checks if the pivot does not exist, that is, nums is already the largest lexicographic permutation
+	if ( pivot == -1 ) {
+		return -1;
+	}
+
+	// Gets the smallest digit larger than the pivot 
+	char min = ':';
+	int min_pos = digits - 1;
+	for ( int i = pivot + 1; i < digits; i++ ) {
+		if ( nums[i] > nums[ pivot ] && min > nums[i] ) {
+			min = nums[i];
+			min_pos = i;
+		}
+	}
+
+	// Swaps min_pos and the pivot characters
+	char* ptr = nums;	
+	*(ptr + pivot) = nums[ pivot ] ^ nums[ min_pos ];
+	*(ptr + min_pos) = nums[ pivot ] ^ nums[ min_pos ];
+	*(ptr + pivot) = nums[ pivot ] ^ nums[ min_pos ]; 
+
+	// Reverses the characters greater than pivot 
+	for ( int i = pivot + 1; i < (digits + pivot + 1)/2; i++ ) {
+		nums[i] = nums[ digits + pivot - i ] ^ nums[i];
+		nums[ digits + pivot - i ] = nums[ digits + pivot - i ] ^ nums[i];
+		nums[i] = nums[ digits + pivot - i ] ^ nums[i];
+	}
+
+	// Converts the string to int
+	char* endptr;
+	int result = (int)strtol( nums, &endptr, 10 ); 
+	return result;
+
+}

@@ -3,5 +3,6 @@
 
 int is_pandigital( int num, int limit );
 int num_digits( int num );
+int next_permutation( int num );
 
 #endif 
