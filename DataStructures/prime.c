@@ -115,3 +115,49 @@ int* sieve_of_eratosthenes( unsigned int limit, int* length ) {
 	return primes;
 
 }
+
+
+int* prime_factors( unsigned int num, int* num_factors ) {
+
+	int count = 0;
+	int n = num;
+	char primes[ n + 1 ];
+	memset( primes, '0', (n + 1) * sizeof(char) );
+
+	while ( n % 2 == 0 ) {
+		if (primes[2] == '0') {
+			primes[2] = '1';
+			count++;
+		}
+		n /= 2;
+	}
+
+	for ( int i = 3; i <= ceil(sqrt(n)); i += 2 ) {
+		while ( n % i == 0 ) {
+			if (primes[i] == '0') {
+				primes[i] = '1';
+				count++;
+			}
+			n /= i;
+		}
+	}
+
+	if (n > 2) {
+		primes[n] = '1';
+		count++;
+	}
+
+	*num_factors = count;
+	int* factors = calloc( count, sizeof(int) );
+
+	count = 0;
+	for (int i = 0; i <= num; i++ ) {
+		if (primes[i] == '1') {
+			factors[count] = i;
+			count++;
+		}
+	}
+
+	return factors;
+
+}
