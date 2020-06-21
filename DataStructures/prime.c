@@ -117,13 +117,18 @@ int* sieve_of_eratosthenes( unsigned int limit, int* length ) {
 }
 
 
+/**
+ * Gets a list of prime factors of the input num
+ */
 int* prime_factors( unsigned int num, int* num_factors ) {
 
+	// Initializes a char array to mark the prime factors
 	int count = 0;
 	int n = num;
 	char primes[ n + 1 ];
 	memset( primes, '0', (n + 1) * sizeof(char) );
 
+	// Removes factors of 2
 	while ( n % 2 == 0 ) {
 		if (primes[2] == '0') {
 			primes[2] = '1';
@@ -132,6 +137,7 @@ int* prime_factors( unsigned int num, int* num_factors ) {
 		n /= 2;
 	}
 
+	// Removes all other prime factors
 	for ( int i = 3; i <= ceil(sqrt(n)); i += 2 ) {
 		while ( n % i == 0 ) {
 			if (primes[i] == '0') {
@@ -142,14 +148,17 @@ int* prime_factors( unsigned int num, int* num_factors ) {
 		}
 	}
 
+	// Tests if num itself is prime
 	if (n > 2) {
 		primes[n] = '1';
 		count++;
 	}
 
+	// Dynamically allocates an array to store the prime factors
 	*num_factors = count;
 	int* factors = calloc( count, sizeof(int) );
 
+	// Adds the prime factors to the dynamically allocated array
 	count = 0;
 	for (int i = 0; i <= num; i++ ) {
 		if (primes[i] == '1') {
@@ -159,5 +168,46 @@ int* prime_factors( unsigned int num, int* num_factors ) {
 	}
 
 	return factors;
+
+}
+
+
+/**
+ * Gets the number of distinct prime factors of the input num
+ */
+int num_prime_factors( unsigned int num ) {
+
+	// Initializes count for the number of distinct prime factors
+	int count = 0;
+	char divides = 0;
+
+	// Removes all factors of 2
+	while ( num % 2  == 0 ) {
+		if (divides == 0) {
+			count++;
+			divides = 1;
+		}
+		num /= 2;
+	}
+	divides = 0;
+
+	// Removes all other prime factors
+	for ( int i = 3; i <= ceil(sqrt(num)); i += 2 ) {
+		while ( num % i == 0 ) {
+			if (divides == 0) {
+				count++;
+				divides = 1;
+			}
+			num /= i;
+		}
+		divides = 0;
+	}
+
+	// Tests if num itself is prime
+	if ( num > 2 ) {
+		count++;
+	}
+
+	return count;
 
 }
